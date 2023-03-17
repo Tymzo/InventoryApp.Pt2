@@ -58,7 +58,18 @@ class ItemDetailFragment : Fragment() {
             itemName.text = item.itemName
             itemPrice.text = item.getFormattedPrice()
             itemCount.text = item.quantityInStock.toString()
+            sellItem.isEnabled = viewModel.isStockAvailable(item)
+            sellItem.setOnClickListener { viewModel.sellItem(item) }
+            editItem.setOnClickListener { editItem() }
         }
+    }
+
+    private fun editItem() {
+        val action = ItemDetailFragmentDirections.actionItemDetailFragmentToAddItemFragment(
+            getString(R.string.edit_fragment_title),
+            item.id
+        )
+        this.findNavController().navigate(action)
     }
 
     /**
@@ -80,6 +91,7 @@ class ItemDetailFragment : Fragment() {
      * Deletes the current item and navigates to the list fragment.
      */
     private fun deleteItem() {
+        viewModel.deleteItem(item)
         findNavController().navigateUp()
     }
 
